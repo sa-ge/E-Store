@@ -37,8 +37,9 @@ class EmployeeController extends AbstractController
             $salary =$_POST['salary'];
             $sys = $_POST['os'];
         }
+
         $os = implode(',',$sys);
-         $emp = DB::getInstance()->insert('app_employees', array(
+         $emp = DB::getInstance()->insert('employees', array(
              'name' => $name,
              'age' => $age,
              'gender' => $gender, 
