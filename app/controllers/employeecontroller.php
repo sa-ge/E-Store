@@ -39,7 +39,7 @@ class EmployeeController extends AbstractController
         }
 
         $os = implode(',',$sys);
-         $emp = DB::getInstance()->insert('employees', array(
+        $emp = DB::getInstance()->insert('employees', array(
              'name' => $name,
              'age' => $age,
              'gender' => $gender, 
