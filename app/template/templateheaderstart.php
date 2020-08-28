@@ -3,6 +3,9 @@
 
 <head>
     <meta charset="utf-8">
+<?
+header('Content-Type: text/html; charset=UTF8');
+?>
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>مرحباً بكم في لوحة التحكم</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">

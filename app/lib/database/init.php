@@ -10,7 +10,9 @@ $GLOBALS['config']= array(
     'host' => '127.0.0.1',
     'username' => 'root',
     'password' => '', 
-    'db' => 'storedb'
+
+    'db' => 'storedb',
+
       ),
 'remember' => array(
     'cookie_name' => 'hash', 

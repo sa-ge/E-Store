@@ -6,6 +6,7 @@
             <th>العمر</th>
             <th>العنوان </th>
             <th>المرتب</th>
+            <th>نوع الوظيفة</th>
             <th>الضريبة (%)</th>
             <th>التحكم</th>
         </tr>
@@ -29,7 +30,17 @@
                  $address = $row->address ; 
                  $salary = $row->salary;
                  $taxRate = $row->taxRate;
-                 
+
+                 switch($row->job_type) 
+                 {
+                 case 0:
+                    $job_type = "دوام جزئي";
+                    break;
+                 case 1:
+                     $job_type = "دوام كلي";
+                   break;
+                 }
+
                /*  $_SESSION['id'] = $row->id;  
                  $_SESSION['name'] = $row->name; 
                  $_SESSION['age'] = $row->age; 
@@ -50,6 +61,7 @@
                 <td><?= $age; ?></td>
                 <td><?= $address;?></td>
                 <td><?= $salary; ?> </td>
+                <td><?= $job_type; ?></td>
                 <td><?= $taxRate ; ?></td>
 
                 <td>

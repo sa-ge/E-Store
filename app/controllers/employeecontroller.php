@@ -26,6 +26,7 @@ class EmployeeController extends AbstractController
     }   public function editAction()
     {
         $this->_view();
+
     }
 
     public function storeAction()
