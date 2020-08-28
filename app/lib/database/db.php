@@ -88,7 +88,7 @@ class DB
     {
         return $this->results()[0];
     }
-    public function get($table,$where)
+    public function get($table,$where= array())
     {
         return $this->action('SELECT *', $table,$where);
     }

@@ -7,7 +7,18 @@ class EmployeeController extends AbstractController
 {
     public function defaultAction()
     {
-        $this->_view();
+        
+        $emps = DB::getInstance()->get('employees',array( 'id' , '>','0'));
+        
+       if(!is_null($emps->results())){ 
+              for($counter = 0; $counter <= count($emps->results()); $counter=$counter +1)
+              {
+                $row = $emps->results();
+                $_SESSION['employees'] = $row;
+              
+              }
+           }
+               $this->_view();
     }
     public function addAction()
     {
@@ -16,6 +27,7 @@ class EmployeeController extends AbstractController
     {
         $this->_view();
     }
+
     public function storeAction()
     {
         static $age;

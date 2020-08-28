@@ -19,29 +19,48 @@
     if(false !== $employees) {
         foreach ($employees as $employee) {
         */ ?>
-        <?php
-        $con = mysqli_connect('127.0.0.1', 'root', '', 'storedb');
-        $sql = "select * from app_employees";
-        $employees = mysqli_query( $con, $sql);
-        if(!$employees){
-            die();
-        }
-        while ($row = mysqli_fetch_array($employees)) { ?>
+          <?
+          if(!is_null($_SESSION['employees'])) {
+              for($count = 0 ; $count < count($_SESSION['employees']) ; $count = $count + 1) 
+              {  
+                 $row = $_SESSION['employees'][$count];
+                 $name = $row->name; 
+                 $age = $row->age;
+                 $address = $row->address ; 
+                 $salary = $row->salary;
+                 $taxRate = $row->taxRate;
+                 
+               /*  $_SESSION['id'] = $row->id;  
+                 $_SESSION['name'] = $row->name; 
+                 $_SESSION['age'] = $row->age; 
+                 $_SESSION['gender'] = $row->gender; 
+                 $_SESSION['address']  = $row->address; 
+                 $_SESSION['systemsCanUse']  = $row->systemsCanUse; 
+                 $_SESSION['salary']  = $row->salary ;
+                 $_SESSION['taxRate']  = $row->taxRate ;
+                 $_SESSION['notes']= $row->notes; 
+                */  
+                 
+              
+ 
+                    ?>
+          <tr>
 
-            <tr>
+                <td><?= $name; ?></td>
+                <td><?= $age; ?></td>
+                <td><?= $address;?></td>
+                <td><?= $salary; ?> </td>
+                <td><?= $taxRate ; ?></td>
 
-                <td><?= $row['name']; ?></td>
-                <td><?= $row['age']; ?></td>
-                <td><?= $row['address']; ?></td>
-                <td><?= $row['salary']; ?>$</td>
-                <td><?= $row['taxRate']; ?></td>
                 <td>
-                    <a name="edit" href="/employee/edit/<?= $row['id']; ?>"><i class="fa fa-edit"></i></a>
+                    <a name="edit" href="/employee/edit/<?= $row->id; ?>"><i class="fa fa-edit"></i></a>
                     <a href="/employee/delete/موظف اي دي" onclick="if(!confirm('هل ترغب في حذف الموظف')) return false;"><i class="fa fa-trash"></i></a>
                 </td>
             </tr>
+            <?  }}
+            
+ ?>
 
-        <?php }    ?>
         <?php $d = 4;/*
         }
     }
