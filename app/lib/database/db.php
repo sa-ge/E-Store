@@ -3,7 +3,6 @@ namespace PHPMVC\LIB\DATABASE;
 
 class DB 
 {
-
     private static $_instance = null; 
     private 
     $_pdo,
@@ -37,10 +36,9 @@ class DB
     }
 
     public function query($sql, $params = array())
-    {
-        $this-> _error =false;
+    { $this-> _error =false;
 
-        if($this->_query = $this->_pdo ->prepare($sql))
+        if($this->_query = $this->_pdo->prepare($sql))
         {
             $x=1;
             if (count($params))

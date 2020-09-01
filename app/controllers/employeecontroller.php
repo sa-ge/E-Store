@@ -3,6 +3,7 @@ namespace PHPMVC\CONTROLLERS;
 use PHPMVC\LIB\DATABASE\DB;
 use PHPMVC\CONTROLLERS\AbstractController;
 
+
 class EmployeeController extends AbstractController
 {
     public function defaultAction()
@@ -20,15 +21,15 @@ class EmployeeController extends AbstractController
            }
                $this->_view();
     }
+
     public function addAction()
     {
         $this->_view();
     }   public function editAction()
     {
         $this->_view();
-
     }
-
+    
     public function storeAction()
     {
         static $age;
@@ -39,6 +40,7 @@ class EmployeeController extends AbstractController
         static $salary;
         static $taxRate;
         static $notes;
+        static $jobtype;
         if(isset($_POST['submit']))
         {
             $name= $_POST['name'];
@@ -49,6 +51,7 @@ class EmployeeController extends AbstractController
             $taxRate = $_POST['tax'];
             $salary =$_POST['salary'];
             $sys = $_POST['os'];
+            $jobtype = $_POST['type'];
         }
 
         $os = implode(',',$sys);
@@ -62,7 +65,8 @@ class EmployeeController extends AbstractController
              'systemsCanUse' => $os, 
              'salary' => $salary, 
              'taxRate' => $taxRate,
-             'notes' => $notes
+             'notes' => $notes,
+             'job_type' => $jobtype
              
          ));
          header("Location:default");
