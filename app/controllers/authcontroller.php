@@ -4,13 +4,20 @@ use PHPMVC\LIB\DATABASE\DB;
 use PHPMVC\CONTROLLERS\AbstractController;
 
 
-class userController extends AbstractController
+class authController extends AbstractController
 {
-    public function defaultAction()
+    public function loginAction()
     {
-               $this->_view();
+        $this->_view();
     }
 
+
+    public function defaultAction()
+    {
+        $this->setAction("/login");
+
+        $this->loginAction(); 
+    }
     public function createAction()
     {
         $this->_view();

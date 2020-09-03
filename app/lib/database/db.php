@@ -79,61 +79,82 @@ class DB
 
             }
         }
-        return false;
-    }
-    
-    public function results()
-    {
-        return $this->_results;
-    }
-    public function first()
-    {
-        return $this->results()[0];
-    }
-    public function get($table,$where= array())
-    {
-        return $this->action('SELECT *', $table,$where);
-    }
-    public function delete($table,$where)
-    {
-        return $this->action('DELETE *', $table,$where);
+    return false;
+}
 
-    }
-    public function insert($table, $fields = array())
-    {
-        if(count($fields)){
-            $keys = array_keys($fields);
-            $values = '';
-            $x =1;
+public function results()
+{
+    return $this->_results;
+}
+public function first()
+{
+    return $this->results()[0];
+}
+public function get($table,$where= array())
+{
+    return $this->action('SELECT *', $table,$where);
+}
+public function delete($table,$where)
+{
+    return $this->action('DELETE *', $table,$where);
 
-            foreach($fields as $field)
+}
+public function insert($table, $fields = array())
+{
+        $keys = array_keys($fields);
+        $values = '';
+        $x =1;
+
+        foreach($fields as $field)
+        {
+            $values .= '?';
+            if($x < count($fields))
             {
-                $values .= '?';
-                if($x < count($fields))
-                {
-                    $values .= ', ';
-                }
-                $x++;
+                $values .= ', ';
             }
-            $sql = "INSERT INTO $table (`".implode('`,`',$keys)."`)  VALUES ({$values})";
-
-            if(!$this->query($sql,$fields)->error())
-            {
-                return true;
-            }
-
+            $x++;
         }
-        return false;
+        $sql = "INSERT INTO $table (`".implode('`,`',$keys)."`)  VALUES ({$values})";
 
-    }
+        if(!$this->query($sql,$fields)->error())
+        {
+            return true;
+        }
 
 
-    public function error()
+}
+
+public function update($table, $id, $fields)
+{
+    $set = '';
+    $x = 1;
+    foreach($fields as $name => $value)
     {
-        return $this->_error;
+        $set .= "{$name} = ?";
+
+        if ($x < count($fields)) {
+           $set.=', ';
+        }
+        $x++;
     }
 
-    public function count(){
-       return $this->_count;
+
+    $sql = "UPDATE {$table} SET {$set} WHERE id = {$id}"; 
+
+    if($this->query($sql, $fields)->error())
+    {
+        return true;
     }
+    return false;
+
+}
+
+public function error()
+{
+    return $this->_error;
+}
+
+public function count(){
+   return $this->_count;
+}
 }

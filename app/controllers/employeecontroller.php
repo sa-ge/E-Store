@@ -25,9 +25,17 @@ class EmployeeController extends AbstractController
     public function addAction()
     {
         $this->_view();
-    }   public function editAction()
+    }
+
+    public function editAction()
     {
+        $emEdit = DB::getInstance()->update('employees', 1 , array(
+            'name' => 'alhelaly',
+            'salary' => '8700'
+        )); 
         $this->_view();
+
+        
     }
     
     public function storeAction()
