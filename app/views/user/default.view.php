@@ -1,5 +1,5 @@
 <div class="container">
-    <a href="/users/create" class="button"><i class="fa fa-plus"></i></a>
+    <a href="/user/create" class="button"><i class="fa fa-plus"></i></a>
     <table class="data">
         <thead>
             <tr>

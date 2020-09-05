@@ -18,11 +18,12 @@ class authController extends AbstractController
 
         $this->loginAction(); 
     }
-    public function createAction()
+
+    public function logoutAction()
     {
+        $this->setAction("/login");
         $this->_view();
     }
-
     public function editAction()
     {
         $this->_view();

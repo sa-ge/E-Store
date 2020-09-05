@@ -2,7 +2,7 @@
 
 namespace PHPMVC\Models;
 
-class Employee extends AbstractModel 
+class Input extends AbstractModel 
 {
     public $id; 
     public $name; 

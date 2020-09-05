@@ -34,11 +34,10 @@ class AbstractController
             $view = VIEWS_PATH . $this->_controller .DS. $this->_action .'.view.php';
             if (file_exists($view))
             {
+
+                require_once TEMPLATE_PATH.'templateheaderstart.php';
                 if($this->_controller != "auth")
                 {
-
-                
-                require_once TEMPLATE_PATH.'templateheaderstart.php';
                 require_once TEMPLATE_PATH.'templateheaderend.php';
                 require_once TEMPLATE_PATH . 'wrapperstart.php';
                 require_once TEMPLATE_PATH . 'header.php';
@@ -52,6 +51,7 @@ class AbstractController
                 {
                     include_once $view;
                 }
+                require_once TEMPLATE_PATH . 'templatefooter.php';
 
             }else
             {
