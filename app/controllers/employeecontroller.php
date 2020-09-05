@@ -73,7 +73,7 @@ class EmployeeController extends AbstractController
              'systemsCanUse' => $os, 
              'salary' => $salary, 
              'taxRate' => $taxRate,
-       
+             'notes' => $notes ,      
              'job_type' => $jobtype
              
          ));
