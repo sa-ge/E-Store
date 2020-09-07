@@ -2,7 +2,7 @@
 namespace PHPMVC\CONTROLLERS;
 use PHPMVC\LIB\DATABASE\DB;
 use PHPMVC\CONTROLLERS\AbstractController;
-
+use PHPMVC\LIB\CLASSES\Session;
 
 class EmployeeController extends AbstractController
 {
@@ -10,16 +10,9 @@ class EmployeeController extends AbstractController
     {
         
         $emps = DB::getInstance()->get('employees',array( 'id' , '>','0'));
-        
-       if(!is_null($emps->results())){ 
-              for($counter = 0; $counter <= count($emps->results()); $counter=$counter +1)
-              {
-                $row = $emps->results();
-                $_SESSION['employees'] = $row;
-              
-              }
-           }
-               $this->_view();
+        $row = (array) $emps->results();
+        Session::name('employees',$row); 
+        $this->_view();
     }
 
     public function addAction()
