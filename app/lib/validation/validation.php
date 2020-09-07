@@ -23,9 +23,15 @@ class Validation
     public function check($source, $items = array())
     {
         foreach ($items as $item => $rules) {
-            foreach($rules as $rule => $rule_value) 
-            {
+            foreach($rules as $rule => $rule_value){
+                if(is_array($source[$item])){
+                        $value = implode(',',$source[$item]);
+                        $source[$item] = $value;
+                }
+                else{
+
                 $value = trim($source[$item]) ;
+                }
                 $name = $items[$item]['name'];
                 $item = Sanitize::escape($item);
                 if($rule === 'required' && empty($value))
@@ -59,6 +65,21 @@ class Validation
                                 if($check->count()){
                                     $this->addError("{$item} already exists.");
                                 }
+                            break;
+                        case 'bool':
+                            if($rule_value > 1 || $rule_value < 0){
+                                    $this->addError("{$name} value can be only 0 or 1");
+                            }
+                            break;
+                        case 'min_value':
+                            if($value < $rule_value ){
+                                $this->addError("{$name} must be a minimum of {$rule_value}.");
+                            }
+                            break;
+                        case 'max_value':
+                            if($value > $rule_value ){
+                                $this->addError("{$name} must be a maximum of {$rule_value}.");
+                            }
                             break;
                         default:
                             break;
