@@ -15,12 +15,8 @@ class DB
     {
         try {
             $this->_pdo= new \PDO('mysql:host='. Config::get('mysql/host') .
-            ';dbname='. Config::get('mysql/db') ,Config::get('mysql/username')
-              ,Config::get('mysql/password'),
-              array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8' "));
-
-             
-
+            ';dbname='. Config::get('mysql/db').';charset=UTF8' ,Config::get('mysql/username')
+                ,Config::get('mysql/password'));
         } catch (\PDOException $e) {
         die($e->getMessage());   
         }
