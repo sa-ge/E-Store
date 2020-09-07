@@ -17,7 +17,14 @@
             <div class="input_wrapper password">
                 <input required type="password" id="ucpwd" name="password" maxlength="100" value="p" placeholder="<?//= $login_ucpwd ?> كلمة المرور">
             </div>
-            <input type="submit" name="login" value="<?//= $login_button ?> تسجيل الدخول">
+
+            <label style="margin-top:10px" class="checkbox block">
+                <input type="checkbox" name="os[]" id="os" value="1">
+                <span>تذكرني</span>
+                <div class="checkbox_button"></div>
+            </label>
+
+            <input type="submit" name="login" style="margin-top:10px" value="<?//= $login_button ?> تسجيل الدخول">
         </form>
     </div>
 </div>
