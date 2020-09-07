@@ -1,3 +1,8 @@
+<?php 
+
+use PHPMVC\LIB\FUNCTIONS\Sanitize;
+?>
+
 <a class="button" href="/employee/add"><i class="fa fa-plus"></i>الموظفين</a>
 <table class="data">
     <thead>
@@ -12,70 +17,26 @@
         </tr>
     </thead>
     <tbody>
-        <?php
-
-        use PHPMVC\Models\Employee;
-
-        $x = 4;/*
-    if(false !== $employees) {
-        foreach ($employees as $employee) {
-        */ ?>
-          <?
-          if(!is_null($_SESSION['employees'])) {
-              for($count = 0 ; $count < count($_SESSION['employees']) ; $count = $count + 1) 
-              {  
-                 $row = $_SESSION['employees'][$count];
-                 $name = $row->name; 
-                 $age = $row->age;
-                 $address = $row->address ; 
-                 $salary = $row->salary;
-                 $taxRate = $row->taxRate;
-
-                 switch($row->job_type) 
-                 {
-                 case 0:
-                    $job_type = "دوام جزئي";
-                    break;
-                 case 1:
-                     $job_type = "دوام كلي";
-                   break;
-                 }
-
-               /*  $_SESSION['id'] = $row->id;  
-                 $_SESSION['name'] = $row->name; 
-                 $_SESSION['age'] = $row->age; 
-                 $_SESSION['gender'] = $row->gender; 
-                 $_SESSION['address']  = $row->address; 
-                 $_SESSION['systemsCanUse']  = $row->systemsCanUse; 
-                 $_SESSION['salary']  = $row->salary ;
-                 $_SESSION['taxRate']  = $row->taxRate ;
-                 $_SESSION['notes']= $row->notes; 
-                */  
-                 
-              
- 
-                    ?>
+        
+                <? for($count = 0; $count < count($_SESSION['employees']); $count++){ ?>
           <tr>
-
-                <td><?= $name; ?></td>
-                <td><?= $age; ?></td>
-                <td><?= $address;?></td>
-                <td><?= $salary; ?> </td>
-                <td><?= $job_type; ?></td>
-                <td><?= $taxRate ; ?></td>
+          <td><?= Sanitize::escape($_SESSION['employees'][$count]->name);?></td>
+                <td><?= Sanitize::escape($_SESSION['employees'][$count]->age);?></td>
+                <td><?= Sanitize::escape($_SESSION['employees'][$count]->address);?></td>
+                <td><?= Sanitize::escape($_SESSION['employees'][$count]->salary);?></td>
+                <? if(Sanitize::escape($_SESSION['employees'][$count]->job_type) == 1){
+                    $job_type = "دوام كلي";
+                    }else{
+                    $job_type = "دوام جزئي";
+                    }?>
+                    <td><?= Sanitize::escape($job_type);?></td>
+                <td><?= Sanitize::escape($_SESSION['employees'][$count]->taxRate);?></td>
 
                 <td>
-                    <a name="edit" href="/employee/edit/<?= $row->id; ?>"><i class="fa fa-edit"></i></a>
-                    <a href="/employee/delete/موظف اي دي" onclick="if(!confirm('هل ترغب في حذف الموظف')) return false;"><i class="fa fa-trash"></i></a>
+                    <a name="edit" href="/employee/edit/<?= Sanitize::escape($_SESSION['employees'][$count]->id); ?>"><i class="fa fa-edit"></i></a>
+                    <a href="/employee/delete/<?= Sanitize::escape($_SESSION['employees'][$count]->id); ?>" onclick="if(!confirm('هل ترغب في حذف الموظف')) return false;"><i class="fa fa-trash"></i></a>
                 </td>
             </tr>
-            <?  }}
-            
- ?>
-
-        <?php $d = 4;/*
-        }
-    }
-    */ ?>
+                <?}?>
     </tbody>
 </table>
