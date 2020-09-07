@@ -3,12 +3,19 @@ namespace PHPMVC\CONTROLLERS;
 use PHPMVC\CONTROLLERS\AbstractController;
 use PHPMVC\MODELS\Input;
 use PHPMVC\LIB\VALIDATION\Validation;
+use PHPMVC\LIB\CLASSES\Hash;
+use PHPMVC\LIB\CLASSES\Session;
+use PHPMVC\MODELS\User;
+use PHPMVC\LIB\DATABASE\DB;
 
 class userController extends AbstractController
 {
     public function defaultAction()
     {
-               $this->_view();
+        $db = DB::getInstance()->get('users'  ,array( 'id' ,'>', '0' ));
+        $row = (array) $db->results();
+        Session::name('users',$row);    
+        $this->_view();
     }
 
     public function createAction()
@@ -27,46 +34,70 @@ class userController extends AbstractController
     {
         if( Input::exists())
         {
-            $validate = new Validation();
-                $validation = $validate->check($_POST, array(
-                'name' => array( 
-                    'name'=> 'name',
-                    'required' => true, 
-                    'min' => 2, 
-                    'max' => 50
-                ),
-                'user_name' => array(
-                    'name'=> 'user name',
-                    'required' => true, 
+ //           if(Token::check(Input::get('token')))
+   //         {
 
-                    'min' => 2, 
-                    'max' => 20, 
-                    'unique' => 'users'
-                ),
-                'password' => array(
-                    'name'=> 'password',
-                    'required' => true, 
-                    'min' => 6, 
-                ),
-                'password_again' => array( 
-                    'name'=> 'password confirm',
-                    'required' => true, 
-                    'matches' => 'password', 
-                )
+                    $validate = new Validation();
+                    $validation = $validate->check($_POST, array(
+                    'name' => array( 
+                        'name'=> 'name',
+                        'required' => true, 
+                        'min' => 2, 
+                        'max' => 50
+                    ),
+                    'user_name' => array(
+                        'name'=> 'user name',
+                        'required' => true, 
 
-            ));
-        
-        
-            if($validation->passed())
-            {
-                echo "passed" ;
-            } 
-            else
-            {
-                
-                $this->setAction("create");
-                $this->createAction();
-            }
+                        'min' => 2, 
+                        'max' => 20, 
+                        'unique' => 'users'
+                    ),
+                    'password' => array(
+                        'name'=> 'password',
+                        'required' => true, 
+                        'min' => 6, 
+                    ),
+                    'password_again' => array( 
+                        'name'=> 'password confirm',
+                        'required' => true, 
+                        'matches' => 'password', 
+                    )
+
+                ));
+            
+            
+                if($validation->passed())
+                {
+                    $user = new User();
+                    $salt = bin2hex(Hash::salt(16));
+                    try {
+                        $user->create(array(
+                        'user_name' => Input::get('user_name'),
+                        'password' => Hash::make(Input::get('password'), $salt),
+                        'salt' => $salt,
+                        'name' => Input::get('name'),
+                        'joined' => date('Y-m-d H:i:s'),
+                        'group' => 2
+                        ));
+                     
+                        Session::flash('sucess', 'تم انشاء الحساب');
+                        header('Location:default');
+                        
+                    } catch (Exception $e) {
+                        die($e->getMessage());
+                    }
+                }
+                 
+                else
+                {
+                    foreach ($validation->errors() as $error) 
+                 {
+                        echo $error ,'<br>'; 
+                 }
+
+                }
+    //        }
         }
     } 
 
