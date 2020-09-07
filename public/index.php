@@ -1,6 +1,6 @@
 <?php
 namespace PHPMVC;
-//session_start();
+session_start();
 if (!defined('DS'))
 {
     define('DS', DIRECTORY_SEPARATOR);
