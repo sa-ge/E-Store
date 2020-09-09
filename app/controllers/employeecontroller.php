@@ -3,154 +3,191 @@ namespace PHPMVC\CONTROLLERS;
 use PHPMVC\LIB\DATABASE\DB;
 use PHPMVC\CONTROLLERS\AbstractController;
 use PHPMVC\LIB\CLASSES\Session;
+use PHPMVC\LIB\CLASSES\Token;
 use PHPMVC\LIB\VALIDATION\Validation;
 use PHPMVC\MODELS\Employee;
 use PHPMVC\MODELS\Input;
+use PHPMVC\LIB\CLASSES\Redirect;
 
 class EmployeeController extends AbstractController
 {
+    private $_state = null;
     public function defaultAction()
     {
-        
+
         $emps = DB::getInstance()->get('employees',array( 'id' , '>','0'));
         $row = (array) $emps->results();
-        Session::putObject('employees',$row); 
+        Session::putObject('employees',$row);
         $this->_view();
     }
 
     public function addAction()
     {
+        $this->_state = 0;
         $this->_view();
     }
 
     public function editAction()
     {
-        $emEdit = DB::getInstance()->update('employees', 1 , array(
-            'name' => 'alhelaly',
-            'salary' => '8700'
-        )); 
-        $this->_view();
 
-        
+        $id = (int) $this->_param[0];
+        Session::flash("id_number", $id);
+        $emp = DB::getInstance()->get('employees', array('id' , '=',$id));
+        $row = (array) $emp->results();
+        Session::putObject('employee', $row);
+        $this->_view();
     }
-    
-    public function storeAction()
+
+    public function editedAction()
+    {
+        $this->_state = (int) $this->_param[0];
+        $this->storeAction();
+    }
+
+    public function deleteAction()
     {
 
+        $id = (int) $this->_param[0];
+        $de = DB::getInstance()->delete('employees', array('id' , '=' ,$id));
+        $this->setAction('default');
+        $this->defaultAction();
+    }
 
-        if(Input::exists())
-        {
-            
+    public function validate()
+    {
+
             $validate = new Validation();
             $validation = $validate->check($_POST , array(
                 'name' => array(
-                    'name' => 'name', 
+                    'name' => 'name',
                     'required' => true,
-                    'min' => 3, 
+                    'min' => 3,
                     'max' => 50
                 ),
                 'age' => array(
-                    'name' => 'age', 
+                    'name' => 'age',
                     'required' => true,
                     'min' => 2,
-                    'max' => 4, 
+                    'max' => 4,
                 ),
-                
+
                 'gender' => array(
-                    'name' => 'gender', 
+                    'name' => 'gender',
                     'required' => true,
                     'min' => 1,
-                    'max' => 4, 
+                    'max' => 4,
                     'bool' => true,
                 ),
-                
+
                 'address' => array(
-                    'name' => 'address', 
+                    'name' => 'address',
                     'required' => true,
                     'min' => 1,
-                    'max' => 50, 
+                    'max' => 50,
                 ),
                 'systemsCanUse' => array(
-                    'name' => 'systemsCanUse', 
+                    'name' => 'systemsCanUse',
                     'required' => true,
                     'min' => 1,
-                    'max' => 8, 
+                    'max' => 8,
                 ),
                 'salary' => array(
-                    'name' => 'salary', 
+                    'name' => 'salary',
                     'required' => true,
                     'min' => 3,
                     'max' => 11,
                     'min_value' => 1000,
-                    'max_value' => 1000000, 
+                    'max_value' => 1000000,
                 ),
 
                 'taxRate' => array(
-                    'name' => 'taxRate', 
+                    'name' => 'taxRate',
                     'required' => true,
                     'min' => 1,
                     'max' => 4,
                     'min_value' => 0,
-                    'max_value' => 5, 
+                    'max_value' => 5,
                 ),
                 'notes' => array(
-                    'name' => 'notes', 
-                    'required' => false,
+                    'name' => 'notes',
                 ),
                 'job_type' => array(
-                    'name' => 'job_type', 
+                    'name' => 'job_type',
                     'required' => true,
                     'bool' => true,
                 ),
             ));
-            
-            $emp = new Employee();
             if($validation->passed()){
+                return true;
 
-            
+            }
+            else
+            {
+                    foreach ($validation->errors() as $error)
+                 {
+
+                        Session::flash('errors',$validation->errors());
+                        echo $error ,'<br>';
+                        if($this->_state === 0){
+                        Redirect::to('add');
+                        }else{
+                        Redirect::to("/employee/edit/{$this->_state}");
+                        }
+                 }
+
+            }
+
+            return false;
+    }
+
+
+
+    public function set()
+    {
+
+        $emp = new Employee();
+        if($this->validate()){
             try{
-
-            
             $emp->create(array(
                 'name' => Input::get('name'),
                  'age' => Input::get('age'),
-                 'gender' => Input::get('gender'), 
-                 'address' => Input::get('address'), 
-                 'systemsCanUse' => implode(',',Input::get('systemsCanUse')), 
-                 'salary' => Input::get('salary'), 
+                 'gender' => Input::get('gender'),
+                 'address' => Input::get('address'),
+                 'systemsCanUse' => implode(',',Input::get('systemsCanUse')),
+                 'salary' => Input::get('salary'),
                  'taxRate' => Input::get('taxRate'),
-                 'notes' => Input::get('notes'), 
-                 'job_type' =>Input::get('job_type'), 
-                 
-             ));
-                Session::flash('employee_added_success', 'تمت اضافة الموظف');
-                $this->defaultAction();
+                 'notes' => Input::get('notes'),
+                 'job_type' =>Input::get('job_type'),
+             ),$this->_state);
+            if($this->_state == 0){
+                Session::flash('employee_added_success', "تمت اضافة الموظف");
+            }else{
+                Session::flash('employee_added_success', "تم تعديل بيانات الموظف بنجاح");
+            }
+                Redirect::to('\employee\default');
+
                 }
                  catch (Exception $e) {
                         die($e->getMessage());
                  }
 
-            } else
-            {
-                    foreach ($validation->errors() as $error) 
-                 {
-                        echo $error ,'<br>'; 
-                 }
-
             }
+    }
 
+    public function storeAction()
+    {
+        if(Input::exists())
+        {
+                if(Token::check(Input::get('token')))
+                {
+                    if(!is_numeric($this->_state)){
+                        $this->_state = 0;
+                    }
+                        $this->set();
+
+                }
         }
-        // $em = DB::getInstance()->get('employees' , array('id' ,'=', '1'));
-        // if(!$em->count()){
-        //     echo "no user";
-        // }
-        // else 
-        // {
-        //     foreach($em->results() as $emp){
-        //         echo $emp->systemsCanUse;
-        //         }
-            
-        // }
-         
+
     }
 }
+
