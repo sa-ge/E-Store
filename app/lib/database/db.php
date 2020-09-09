@@ -1,10 +1,10 @@
 <?php
 namespace PHPMVC\LIB\DATABASE;
 
-class DB 
+class DB
 {
-    private static $_instance = null; 
-    private 
+    private static $_instance = null;
+    private
     $_pdo,
     $_query,
     $_error = false,
@@ -18,10 +18,10 @@ class DB
             ';dbname='. Config::get('mysql/db').';charset=UTF8' ,Config::get('mysql/username')
                 ,Config::get('mysql/password'));
         } catch (\PDOException $e) {
-        die($e->getMessage());   
+        die($e->getMessage());
         }
-    } 
-    
+    }
+
     public static function getInstance()
     {
         if (!isset(self::$_instance))
@@ -45,13 +45,13 @@ class DB
                     $x++;
                 }
             }
-            
+
             if($this->_query->execute()){
                 $this->_results = $this->_query->fetchAll(\PDO::FETCH_OBJ);
                 $this->_count= $this-> _query->rowCount();
             }else
             {
-                $this->_error= true; 
+                $this->_error= true;
             }
         }
         return $this;
@@ -65,7 +65,7 @@ class DB
             $field       = $where[0];
             $operator    = $where[1];
             $value       = $where[2];
-            
+
             if(in_array($operator, $operators))
             {
                 $sql ="{$action} FROM {$table} WHERE {$field} {$operator} ?";
@@ -92,7 +92,7 @@ public function get($table,$where= array())
 }
 public function delete($table,$where)
 {
-    return $this->action('DELETE *', $table,$where);
+    return $this->action('DELETE ', $table,$where);
 
 }
 public function insert($table, $fields = array())
@@ -122,6 +122,7 @@ public function insert($table, $fields = array())
 
 public function update($table, $id, $fields)
 {
+
     $set = '';
     $x = 1;
     foreach($fields as $name => $value)
@@ -135,9 +136,9 @@ public function update($table, $id, $fields)
     }
 
 
-    $sql = "UPDATE {$table} SET {$set} WHERE id = {$id}"; 
 
-    if($this->query($sql, $fields)->error())
+    $sql = "UPDATE {$table} SET {$set} WHERE id = {$id}";
+    if(!$this->query($sql, $fields)->error())
     {
         return true;
     }
