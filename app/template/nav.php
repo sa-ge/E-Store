@@ -26,4 +26,4 @@
                 <p class="message <?= isset($error) ? 'error' : '' ?>"><?= $_SESSION['message'] ?></p>
             <?php unset($_SESSION['message']);
             } ?>
-            
+

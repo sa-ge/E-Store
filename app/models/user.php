@@ -5,7 +5,7 @@ namespace PHPMVC\MODELS;
 use Exception;
 use PHPMVC\LIB\DATABASE\DB;
 
-class User 
+class User
 {
     private $_db;
 
@@ -16,11 +16,11 @@ class User
 
        public function create($fields = array())
        {
-           if(!$this->_db->insert('users', $fields)) 
+           if(!$this->_db->insert('users', $fields))
            {
                throw new Exception('There was a problem creating an account. ');
            }
        }
-        
+
 
 }
