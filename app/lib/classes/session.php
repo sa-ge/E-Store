@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace PHPMVC\LIB\CLASSES;
 
@@ -23,7 +23,7 @@ class Session
     {
         return $_SESSION[$name];
     }
-     
+
     public static function delete($name)
     {
         if(self::exists($name))
@@ -31,12 +31,12 @@ class Session
             unset($_SESSION[$name]);
         }
     }
-    
+
     public static function flash($name , $string = '')
     {
         if(self::exists($name))
         {
-            $session = self::get($name); 
+            $session = self::get($name);
             self::delete($name);
             return $session;
         }
@@ -46,19 +46,20 @@ class Session
         }
 
     }
-        
-    public static function putObject($name ,$param)
+
+    public static function putObject($name ,$param = array())
     {
         if(self::exists($name)){
+            $var = self::get($name);
             self::delete($name);
-            self::put($name, $param);
+            return $var;
         }else{
 
             self::put($name, $param);
         }
     }
-    
-    
-        
+
+
+
 }
 
