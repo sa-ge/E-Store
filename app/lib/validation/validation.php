@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace PHPMVC\LIB\VALIDATION;
 use PHPMVC\LIB\DATABASE\DB;
@@ -19,7 +19,7 @@ class Validation
     {
         $this->_db= DB::getInstance();
     }
-    
+
     public function check($source, $items = array())
     {
         foreach ($items as $item => $rules) {
@@ -36,6 +36,7 @@ class Validation
                 $item = Sanitize::escape($item);
                 if($rule === 'required' && empty($value))
                 {
+                    if($value === 0)
                     $this->addError("{$name} is required");
                 }
                 else if(!empty($value))
@@ -61,7 +62,6 @@ class Validation
                             break;
                         case 'unique':
                             $check = $this->_db->get($rule_value , array($item, '=' , $value)) ;
-
                                 if($check->count()){
                                     $this->addError("{$item} already exists.");
                                 }
@@ -93,7 +93,7 @@ class Validation
             $this->_passed = true;
         }
         return $this;
-        
+
     }
     private function addError($error)
     {
@@ -107,8 +107,8 @@ class Validation
     {
         return $this->_passed;
     }
-    
-    
+
+
 }
 
- 
+
