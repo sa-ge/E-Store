@@ -1,15 +1,25 @@
 <?php
-
 use PHPMVC\LIB\CLASSES\Token;
 use PHPMVC\LIB\CLASSES\Session;
 use PHPMVC\LIB\FUNCTIONS\Sanitize;
 $row = null;
+if(!Session::exists('errors')){
 if(Session::exists('employee')){
   $row = Session::putObject('employee')[0];
 }
 $oss = explode(',' , $row->systemsCanUse);
-if(!$row){
+}else{
+        $message = Session::flash('errors');
+        foreach ($message as $value) {
 
+?>
+<p style="background-color: darkgreen;" class="message t"><a href="" class="closeBtn"><i class="fa fa-times"></i></a><? echo $value; ?></p>
+<?
+        }
+        $row = (object) Session::putObject('post');
+        $oss = $row->systemsCanUse;
+}
+if(!$row){
     die();
 }
 ?>

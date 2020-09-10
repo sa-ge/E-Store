@@ -33,7 +33,6 @@ class DB
 
     public function query($sql, $params = array())
     { $this-> _error =false;
-
         if($this->_query = $this->_pdo->prepare($sql))
         {
             $x=1;
@@ -45,6 +44,7 @@ class DB
                     $x++;
                 }
             }
+
 
             if($this->_query->execute()){
                 $this->_results = $this->_query->fetchAll(\PDO::FETCH_OBJ);
@@ -134,7 +134,6 @@ public function update($table, $id, $fields)
         }
         $x++;
     }
-
 
 
     $sql = "UPDATE {$table} SET {$set} WHERE id = {$id}";

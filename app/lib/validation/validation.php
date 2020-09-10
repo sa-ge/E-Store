@@ -34,9 +34,8 @@ class Validation
                 }
                 $name = $items[$item]['name'];
                 $item = Sanitize::escape($item);
-                if($rule === 'required' && empty($value))
+                if($rule === 'required' && empty($value) && !is_numeric($value))
                 {
-                    if($value === 0)
                     $this->addError("{$name} is required");
                 }
                 else if(!empty($value))
