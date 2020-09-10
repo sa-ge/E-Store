@@ -47,19 +47,27 @@ class Session
 
     }
 
-    public static function putObject($name ,$param = array())
+    public static function putObject($name ,$param = '')
     {
-        if(self::exists($name)){
-            $var = self::get($name);
-            self::delete($name);
-            return $var;
-        }else{
-
+        if($param === '')
+        {
+            if(self::exists($name))
+            {
+                $var = self::get($name);
+                self::delete($name);
+                return $var;
+            }
+        }else
+        {
+            if(!self::exists($name)){
             self::put($name, $param);
+            }else{
+                self::delete($name);
+                self::put($name, $param);
+            }
         }
+
     }
-
-
 
 }
 
