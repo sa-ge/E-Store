@@ -1,7 +1,14 @@
 <?php
 
 use PHPMVC\LIB\CLASSES\Session;
-use PHPMVC\LIB\FUNCTIONS\Sanitize; ?>
+use PHPMVC\LIB\FUNCTIONS\Sanitize;
+
+if(Session::exists('user_added_success')){
+?>
+<p style="background-color: darkgreen;" class="message t"><a href="" class="closeBtn"><i class="fa fa-times"></i></a><? echo Session::flash('employee_added_success'); ?></p>
+<?}
+?>
+
 <div class="container">
     <a href="/user/create" class="button"> إضافة <i class="fa fa-plus"></i></a>
     <table class="data">

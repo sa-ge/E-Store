@@ -12,6 +12,7 @@ use PHPMVC\LIB\DATABASE\DB;
 
 class userController extends AbstractController
 {
+    private $_state = null;
     public function defaultAction()
     {
         $db = DB::getInstance()->get('users'  ,array( 'id' ,'>', '0' ));
@@ -21,15 +22,28 @@ class userController extends AbstractController
     }
     public function createAction()
     {
-        $this->checkAction();
+        $this->storeAction();
         $this->_view();
 
     }
 
     public function editAction()
     {
-        $this->_view();
 
+        $id = (int) $this->_param[0];
+        $emp = DB::getInstance()->get('users', array('id' , '=',$id));
+        $row = (array) $emp->results();
+        Session::putObject('user', $row);
+        if($row){
+        $this->_view();
+        }else{
+            Redirect::to('/user/default');
+        }
+    }
+    public function editedAction()
+    {
+        $this->_state = (int) $this->_param[0];
+        $this->storeAction();
     }
     public function deleteAction()
     {
@@ -86,19 +100,27 @@ class userController extends AbstractController
                 }
                 else
                 {
+                    foreach ($validation->errors() as $error)
+                    {
+
                         Session::flash('errors',$validation->errors());
+                        $_POST['id'] = $this->_state;
+                        Session::putObject('post', $_POST);
+                        echo $error ,'<br>';
+                        if($this->_state === 0){
+                        Redirect::to('add');
+                        }else{
+                        Redirect::to("/user/edit/{$this->_state}");
+                        }
+                    }
                 }
 
                 return false;
     }
 
-    // validation of feilds  when create new user page
-    public function checkAction()
+    public function set()
     {
-        if( Input::exists())
-        {
-        if(Token::check(Input::get('token')))
-        {
+
                 if($this->validate())
                 {
                     $user = new User();
@@ -110,24 +132,36 @@ class userController extends AbstractController
                         'salt' => $salt,
                         'name' => Input::get('name'),
                         'joined' => date('Y-m-d H:i:s'),
-                        'group' => 2
-                        ));
+                        'goup' => (int) Input::get('group'),
+                        ),$this->_state);
 
-                        Session::flash('sucess', 'تم انشاء الحساب');
-                        header('Location:default');
+                if($this->_state == 0){
+                    Session::flash('user_added_success', "تم انشاء الحساب بنجاح");
+                }else{
+                    Session::flash('user_added_success', "تم تعديل البيانات بنجاح");
+                }
+                    Redirect::to('\user\default');
 
                     } catch (Exception $e) {
                         die($e->getMessage());
                     }
-              }
-        }else{
-            Redirect::to('create');
-        }
-        }
+                }
     }
-
-
+    // validation of feilds  when create new user page
     public function storeAction()
     {
+        if( Input::exists())
+        {
+//            if(Token::check(Input::get('token')))
+  //          {
+
+                if(!is_numeric($this->_state)){
+                    $this->_state = 0;
+                }
+                    $this->set();
+   //         }
+        }
+
+
     }
 }

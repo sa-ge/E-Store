@@ -37,10 +37,10 @@ if(Session::exists('errors')){
             <input required type="password" name="password_again" value="" maxlength="40">
         </div>
         <div class="input_wrapper_other padding n20 select">
-            <select required name="GroupId">
+            <select required name="group">
                 <option value=""></option>
-                    <option value="" selected>آدمن</option>
-                    <option value="">المسؤول المالي</option>
+                    <option value="1" selected>آدمن</option>
+                    <option value="2">المسؤول المالي</option>
             </select>
         </div>
         <input class="hidden"  name="token" value="<?php echo Token::generate();?>">
