@@ -3,8 +3,7 @@ namespace PHPMVC\CONTROLLERS;
 use PHPMVC\LIB\DATABASE\DB;
 use PHPMVC\CONTROLLERS\AbstractController;
 use PHPMVC\LIB\CLASSES\Session;
-use PHPMVC\LIB\CLASSES\Token;
-use PHPMVC\LIB\VALIDATION\Validation;
+use PHPMVC\LIB\CLASSES\Token; use PHPMVC\LIB\VALIDATION\Validation;
 use PHPMVC\MODELS\Employee;
 use PHPMVC\MODELS\Input;
 use PHPMVC\LIB\CLASSES\Redirect;
@@ -31,11 +30,14 @@ class EmployeeController extends AbstractController
     {
 
         $id = (int) $this->_param[0];
-        Session::flash("id_number", $id);
         $emp = DB::getInstance()->get('employees', array('id' , '=',$id));
         $row = (array) $emp->results();
         Session::putObject('employee', $row);
+        if($row){
         $this->_view();
+        }else{
+            Redirect::to('/employee/default');
+        }
     }
 
     public function editedAction()
@@ -112,7 +114,7 @@ class EmployeeController extends AbstractController
                     'name' => 'notes',
                 ),
                 'job_type' => array(
-                    'name' => 'job_type',
+                    'name' => 'job type',
                     'required' => true,
                     'bool' => true,
                 ),
@@ -127,6 +129,8 @@ class EmployeeController extends AbstractController
                  {
 
                         Session::flash('errors',$validation->errors());
+                        $_POST['id'] = $this->_state;
+                        Session::putObject('post', $_POST);
                         echo $error ,'<br>';
                         if($this->_state === 0){
                         Redirect::to('add');
@@ -144,32 +148,32 @@ class EmployeeController extends AbstractController
 
     public function set()
     {
-
-        $emp = new Employee();
-        if($this->validate()){
-            try{
-            $emp->create(array(
-                'name' => Input::get('name'),
-                 'age' => Input::get('age'),
-                 'gender' => Input::get('gender'),
-                 'address' => Input::get('address'),
-                 'systemsCanUse' => implode(',',Input::get('systemsCanUse')),
-                 'salary' => Input::get('salary'),
-                 'taxRate' => Input::get('taxRate'),
-                 'notes' => Input::get('notes'),
-                 'job_type' =>Input::get('job_type'),
-             ),$this->_state);
-            if($this->_state == 0){
-                Session::flash('employee_added_success', "تمت اضافة الموظف");
-            }else{
-                Session::flash('employee_added_success', "تم تعديل بيانات الموظف بنجاح");
-            }
-                Redirect::to('\employee\default');
-
+        if($this->validate())
+        {
+            $emp = new Employee();
+                try{
+                $emp->create(array(
+                    'name' => Input::get('name'),
+                     'age' => Input::get('age'),
+                     'gender' => Input::get('gender'),
+                     'address' => Input::get('address'),
+                     'systemsCanUse' => implode(',',Input::get('systemsCanUse')),
+                     'salary' => Input::get('salary'),
+                     'taxRate' => Input::get('taxRate'),
+                     'notes' => Input::get('notes'),
+                     'job_type' =>Input::get('job_type'),
+                 ),$this->_state);
+                if($this->_state == 0){
+                    Session::flash('employee_added_success', "تمت اضافة الموظف");
+                }else{
+                    Session::flash('employee_added_success', "تم تعديل بيانات الموظف بنجاح");
                 }
-                 catch (Exception $e) {
-                        die($e->getMessage());
-                 }
+                    Redirect::to('\employee\default');
+
+                    }
+                     catch (Exception $e) {
+                            die($e->getMessage());
+                     }
 
             }
     }
