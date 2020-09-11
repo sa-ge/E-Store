@@ -67,7 +67,8 @@ class userController extends AbstractController
     {
 
                     $validate = new Validation();
-                    $validation = $validate->check($_POST, array(
+                    $fields  = array(
+
                     'name' => array(
                         'name'=> 'name',
                         'required' => true,
@@ -80,7 +81,6 @@ class userController extends AbstractController
 
                         'min' => 2,
                         'max' => 20,
-                        'unique' => 'users'
                     ),
                     'password' => array(
                         'name'=> 'password',
@@ -91,27 +91,26 @@ class userController extends AbstractController
                         'name'=> 'password confirm',
                         'required' => true,
                         'matches' => 'password',
-                    )
+                    ));
+                    if($this->_state === 0){
+                        $fields['user_name']['unique'] = true;
+                    }
 
-                ));
+                $validation = $validate->check($_POST, $fields);
                 if($validation->passed())
                 {
                     return true;
                 }
                 else
                 {
-                    foreach ($validation->errors() as $error)
-                    {
 
                         Session::flash('errors',$validation->errors());
                         $_POST['id'] = $this->_state;
                         Session::putObject('post', $_POST);
-                        echo $error ,'<br>';
                         if($this->_state === 0){
                         Redirect::to('add');
                         }else{
                         Redirect::to("/user/edit/{$this->_state}");
-                        }
                     }
                 }
 
