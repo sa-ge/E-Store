@@ -125,19 +125,15 @@ class EmployeeController extends AbstractController
             }
             else
             {
-                    foreach ($validation->errors() as $error)
-                 {
 
                         Session::flash('errors',$validation->errors());
                         $_POST['id'] = $this->_state;
                         Session::putObject('post', $_POST);
-                        echo $error ,'<br>';
                         if($this->_state === 0){
                         Redirect::to('add');
                         }else{
                         Redirect::to("/employee/edit/{$this->_state}");
                         }
-                 }
 
             }
 
