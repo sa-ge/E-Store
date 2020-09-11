@@ -6,8 +6,8 @@ $row = null;
 if(!Session::exists('errors')){
 if(Session::exists('employee')){
   $row = Session::putObject('employee')[0];
+  $oss = explode(',' , $row->systemsCanUse);
 }
-$oss = explode(',' , $row->systemsCanUse);
 }else{
         $message = Session::flash('errors');
         foreach ($message as $value) {
