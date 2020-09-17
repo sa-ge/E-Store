@@ -44,25 +44,25 @@ class Validation
                         case 'min':
                             if(strlen($value) < $rule_value)
                             {
-                                $this->addError("{$item} must be a minimum of {$rule_value}.");
+                                $this->addError("{$item} يجب ان تتكون على الاقل من {$rule_value} احرف.");
                             }
                             break;
                         case 'max':
                             if(strlen($value) > $rule_value)
                             {
-                                $this->addError("{$item} must be a maximum of {$rule_value}.");
+                                $this->addError("{$item} لا يمكن ان تتكون من اكثر من{$rule_value} احرف.");
                             }
                             break;
                         case 'matches':
                             if($value != $source[$rule_value])
                             {
-                                $this->addError("{$rule_value} must match {$name} ");
+                                $this->addError("{$rule_value} يجب ان يتطابق مع {$name} ");
                             }
                             break;
                         case 'unique':
                             $check = $this->_db->get($rule_value , array($item, '=' , $value)) ;
                                 if($check->count()){
-                                    $this->addError("{$item} already exists.");
+                                    $this->addError("{$name} موجود مسبقاً.");
                                 }
                             break;
                         case 'bool':

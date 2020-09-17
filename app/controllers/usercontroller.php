@@ -26,7 +26,7 @@ class userController extends AbstractController
         $this->_view();
 
     }
-
+     
     public function editAction()
     {
 
@@ -92,9 +92,18 @@ class userController extends AbstractController
                         'required' => true,
                         'matches' => 'password',
                     ));
-                    if($this->_state === 0){
-                        $fields['user_name']['unique'] = true;
+                    $same_user = false;
+                    if($this->_state != 0){
+                        $user = DB::getInstance()->get('users',array('id' ,'=', $this->_state));
+                    if($user->results()[0]->user_name === $_POST['user_name']){
+                       $same_user = true; 
+                        }
+                    } 
+                    if($this->_state === 0 ||  !$same_user ){
+
+                                $fields['user_name']['unique'] = 'users';
                     }
+                
 
                 $validation = $validate->check($_POST, $fields);
                 if($validation->passed())
@@ -108,7 +117,6 @@ class userController extends AbstractController
                         $_POST['id'] = $this->_state;
                         Session::putObject('post', $_POST);
                         if($this->_state === 0){
-                        Redirect::to('add');
                         }else{
                         Redirect::to("/user/edit/{$this->_state}");
                     }
@@ -124,15 +132,16 @@ class userController extends AbstractController
                 {
                     $user = new User();
                     $salt = bin2hex(Hash::salt(16));
-                    try {
-                        $user->create(array(
+                    $new = array(
                         'user_name' => Input::get('user_name'),
                         'password' => Hash::make(Input::get('password'), $salt),
                         'salt' => $salt,
                         'name' => Input::get('name'),
                         'joined' => date('Y-m-d H:i:s'),
                         'goup' => (int) Input::get('group'),
-                        ),$this->_state);
+                    ) ;
+                    try {
+                        $user->create($new,$this->_state);
 
                 if($this->_state == 0){
                     Session::flash('user_added_success', "تم انشاء الحساب بنجاح");
