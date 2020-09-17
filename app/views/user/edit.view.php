@@ -10,12 +10,10 @@ if(Session::exists('user')){
 }
 }else{
         $message = Session::flash('errors');
-        foreach ($message as $value) {
 
 ?>
-<p style="background-color: darkgreen;" class="message t"><a href="" class="closeBtn"><i class="fa fa-times"></i></a><? echo $value; ?></p>
+<p style="background-color: darkgreen;" class="message t"><a href="" class="closeBtn"><i class="fa fa-times"></i></a><? echo $message[0]; ?></p>
 <?
-        }
         $row = (object) Session::putObject('post');
 }
 if(!$row){
