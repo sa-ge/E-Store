@@ -152,5 +152,5 @@ public function error()
 
 public function count(){
    return $this->_count;
-}
+    }
 }

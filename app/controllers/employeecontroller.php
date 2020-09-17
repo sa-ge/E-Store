@@ -13,7 +13,6 @@ class EmployeeController extends AbstractController
     private $_state = null;
     public function defaultAction()
     {
-
         $emps = DB::getInstance()->get('employees',array( 'id' , '>','0'));
         $row = (array) $emps->results();
         Session::putObject('employees',$row);
