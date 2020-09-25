@@ -6,14 +6,10 @@ use PHPMVC\LIB\FUNCTIONS\Sanitize;
 use PHPMVC\LIB\CLASSES\Session;
 if(Session::exists('errors')){
     $x = Session::flash('errors');
-    if(is_array($x)){
-        var_dump($x);
-
 
 ?>
-<p style="background-color: tomato;" class="message t"><a href="" class="closeBtn"><i class="fa fa-times"></i></a><? echo Session::flash('employee_added_success'); ?></p>
-
-<?}
+<p style="background-color: tomato;" class="message t"><a href="" class="closeBtn"><i class="fa fa-times"></i></a><? echo $x[0]; ?></p>
+<?
     }
 ?>
 
