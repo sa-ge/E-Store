@@ -26,10 +26,9 @@ class userController extends AbstractController
         $this->_view();
 
     }
-     
+
     public function editAction()
     {
-
         $id = (int) $this->_param[0];
         $emp = DB::getInstance()->get('users', array('id' , '=',$id));
         $row = (array) $emp->results();
