@@ -26,7 +26,11 @@ class userController extends AbstractController
         $this->_view();
 
     }
-
+    public function moradAction()
+    {
+        echo "murad";
+    }
+    
     public function editAction()
     {
         $id = (int) $this->_param[0];
@@ -44,6 +48,7 @@ class userController extends AbstractController
         $this->_state = (int) $this->_param[0];
         $this->storeAction();
     }
+
     public function deleteAction()
     {
         $ID = 0;
