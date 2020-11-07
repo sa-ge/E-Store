@@ -3,8 +3,8 @@
                 <div class="profile_picture">
                     <img src="img/user.png" alt="User Profile Picture">
                 </div>
-                <span class="name">محمد يحيى</span>
-                <span class="privilege">مدير التطبيق</span>
+                <span class="name">عبدالباسط الهلالي</span>
+                <span class="privilege">نذير مقصع</span>
             </div>
             <ul class="app_navigation">
                 <li><a href="/"><i class="fa fa-dashboard"></i> الاحصائيات العامة</a></li>
